@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
@@ -39,6 +40,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.reactive.messaging.*;
 import io.smallrye.reactive.messaging.annotations.Incomings;
 import io.smallrye.reactive.messaging.annotations.Merge;
+import io.smallrye.reactive.messaging.assembly.AssemblyHook;
 import io.smallrye.reactive.messaging.connectors.WorkerPoolRegistry;
 
 /**
@@ -89,6 +91,9 @@ public class MediatorManager {
 
     @Inject
     Instance<MessageConverter> converters;
+
+    @Inject
+    Instance<AssemblyHook> hooks;
 
     @Inject
     HealthCenter health;
@@ -153,10 +158,26 @@ public class MediatorManager {
         }
         log.deploymentDoneStartProcessing();
 
-        streamRegistars.stream().forEach(ChannelRegistar::initialize);
+        List<ChannelRegistar> registars = streamRegistars.stream().collect(Collectors.toList());
+        for (ChannelRegistar registar : registars) {
+            registar.initialize();
+        }
         Set<String> unmanagedSubscribers = channelRegistry.getOutgoingNames();
         log.initializingMediators();
-        collected.mediators()
+
+        // Before weaving hook
+        Executor executor = Runnable::run;
+        if (!hooks.isUnsatisfied()) {
+            Executor custom = hooks.get().before(registars, channelRegistry);
+            if (custom == null) {
+                System.out.println("Hook called by no executor");
+            } else {
+                executor = custom;
+            }
+        }
+
+        executor.execute(() -> {
+            collected.mediators()
                 .forEach(configuration -> {
                     AbstractMediator mediator = createMediator(configuration);
 
@@ -169,17 +190,18 @@ public class MediatorManager {
 
                     try {
                         Object beanInstance = beanManager.getReference(configuration.getBean(), Object.class,
-                                beanManager.createCreationalContext(configuration.getBean()));
+                            beanManager.createCreationalContext(configuration.getBean()));
 
                         if (configuration.getInvokerClass() != null) {
                             try {
-                                Constructor<? extends Invoker> constructorUsingBeanInstance = configuration.getInvokerClass()
-                                        .getConstructor(Object.class);
+                                Constructor<? extends Invoker> constructorUsingBeanInstance = configuration
+                                    .getInvokerClass()
+                                    .getConstructor(Object.class);
                                 if (constructorUsingBeanInstance != null) {
                                     mediator.setInvoker(constructorUsingBeanInstance.newInstance(beanInstance));
                                 } else {
                                     mediator.setInvoker(configuration.getInvokerClass().getDeclaredConstructor()
-                                            .newInstance());
+                                        .newInstance());
                                 }
 
                             } catch (InstantiationException | IllegalAccessException e) {
@@ -196,7 +218,7 @@ public class MediatorManager {
 
                     if (mediator.getConfiguration().shape() == Shape.PUBLISHER) {
                         log.registeringAsPublisher(mediator.getConfiguration().methodAsString(),
-                                mediator.getConfiguration().getOutgoing());
+                            mediator.getConfiguration().getOutgoing());
                         channelRegistry.register(mediator.getConfiguration().getOutgoing(), mediator.getStream());
                     }
                     if (mediator.getConfiguration().shape() == Shape.SUBSCRIBER) {
@@ -207,7 +229,7 @@ public class MediatorManager {
                         }
                     }
                 });
-
+        });
         try {
             weaving(unmanagedSubscribers);
         } catch (WeavingException e) {
