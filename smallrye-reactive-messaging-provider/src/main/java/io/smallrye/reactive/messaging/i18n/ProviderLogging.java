@@ -160,4 +160,8 @@ public interface ProviderLogging extends BasicLogger {
     @Message(id = 234, value = "Failed to emit a Message to the channel")
     void failureEmittingMessage(@Cause Throwable t);
 
+    @LogMessage(level = Logger.Level.WARN)
+    @Message(id = 235, value = "AssemblyHook returned no executor")
+    void assemblyHookReturnedNoExecutor();
+
 }
