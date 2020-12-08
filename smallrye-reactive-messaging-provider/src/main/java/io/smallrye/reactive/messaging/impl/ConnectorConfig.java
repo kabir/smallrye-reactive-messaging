@@ -14,7 +14,7 @@ import org.eclipse.microprofile.config.spi.Converter;
 /**
  * Implementation of config used to configured the different messaging provider / connector.
  */
-public class ConnectorConfig implements Config {
+class ConnectorConfig implements Config {
 
     /**
      * Name of the attribute checking if the channel is enabled (default) or disabled.

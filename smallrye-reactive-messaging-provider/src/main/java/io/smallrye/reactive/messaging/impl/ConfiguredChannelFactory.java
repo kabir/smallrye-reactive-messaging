@@ -88,9 +88,9 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
                 .collect(Collectors.toList());
     }
 
-    static Map<String, ConnectorConfig> extractConfigurationFor(String prefix, Config root) {
+    static Map<String, Config> extractConfigurationFor(String prefix, Config root) {
         Iterable<String> names = root.getPropertyNames();
-        Map<String, ConnectorConfig> configs = new HashMap<>();
+        Map<String, Config> configs = new HashMap<>();
         names.forEach(key -> {
             // $prefix$name.key=value (the prefix ends with a .)
             if (key.startsWith(prefix)) {
@@ -117,8 +117,8 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
 
         log.channelManagerInitializing();
 
-        Map<String, ConnectorConfig> sourceConfiguration = extractConfigurationFor(ConnectorFactory.INCOMING_PREFIX, config);
-        Map<String, ConnectorConfig> sinkConfiguration = extractConfigurationFor(ConnectorFactory.OUTGOING_PREFIX, config);
+        Map<String, Config> sourceConfiguration = extractConfigurationFor(ConnectorFactory.INCOMING_PREFIX, config);
+        Map<String, Config> sinkConfiguration = extractConfigurationFor(ConnectorFactory.OUTGOING_PREFIX, config);
 
         detectNameConflict(sourceConfiguration, sinkConfiguration);
 
@@ -132,8 +132,8 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
      * @param sourceConfiguration the source configurations
      * @param sinkConfiguration the sink configurations
      */
-    private void detectNameConflict(Map<String, ConnectorConfig> sourceConfiguration,
-            Map<String, ConnectorConfig> sinkConfiguration) {
+    private void detectNameConflict(Map<String, Config> sourceConfiguration,
+            Map<String, Config> sinkConfiguration) {
         // We must create a copy as removing the items from the set remove them from the map.
         Set<String> sources = new HashSet<>(sourceConfiguration.keySet());
         Set<String> sinks = sinkConfiguration.keySet();
@@ -144,11 +144,11 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
 
     }
 
-    void register(Map<String, ConnectorConfig> sourceConfiguration, Map<String, ConnectorConfig> sinkConfiguration) {
+    void register(Map<String, Config> sourceConfiguration, Map<String, Config> sinkConfiguration) {
         try {
-            for (Map.Entry<String, ConnectorConfig> entry : sourceConfiguration.entrySet()) {
+            for (Map.Entry<String, Config> entry : sourceConfiguration.entrySet()) {
                 String channel = entry.getKey();
-                ConnectorConfig config = entry.getValue();
+                Config config = entry.getValue();
                 if (config.getOptionalValue(ConnectorConfig.CHANNEL_ENABLED_PROPERTY, Boolean.TYPE).orElse(true)) {
                     registry.register(channel, createPublisherBuilder(channel, config));
                 } else {
@@ -156,9 +156,9 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
                 }
             }
 
-            for (Map.Entry<String, ConnectorConfig> entry : sinkConfiguration.entrySet()) {
+            for (Map.Entry<String, Config> entry : sinkConfiguration.entrySet()) {
                 String channel = entry.getKey();
-                ConnectorConfig config = entry.getValue();
+                Config config = entry.getValue();
                 if (config.getOptionalValue(ConnectorConfig.CHANNEL_ENABLED_PROPERTY, Boolean.TYPE).orElse(true)) {
                     registry.register(channel, createSubscriberBuilder(channel, config));
                 } else {

@@ -42,8 +42,8 @@ public class LegacyConfiguredChannelFactory extends ConfiguredChannelFactory {
         if (this.config == null) {
             return;
         }
-        Map<String, ConnectorConfig> sourceConfiguration = extractConfigurationFor(SOURCE_CONFIG_PREFIX, config);
-        Map<String, ConnectorConfig> sinkConfiguration = extractConfigurationFor(SINK_CONFIG_PREFIX, config);
+        Map<String, Config> sourceConfiguration = extractConfigurationFor(SOURCE_CONFIG_PREFIX, config);
+        Map<String, Config> sinkConfiguration = extractConfigurationFor(SINK_CONFIG_PREFIX, config);
 
         register(sourceConfiguration, sinkConfiguration);
     }

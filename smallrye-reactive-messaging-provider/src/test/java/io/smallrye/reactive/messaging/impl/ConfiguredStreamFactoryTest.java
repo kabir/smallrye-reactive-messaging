@@ -28,11 +28,11 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name2.another", "1");
 
         Config config = new DummyConfig(backend);
-        Map<String, ConnectorConfig> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
 
         assertThat(map).hasSize(2).containsKeys("name", "name2");
-        ConnectorConfig config1 = map.get("name");
-        ConnectorConfig config2 = map.get("name2");
+        Config config1 = map.get("name");
+        Config config2 = map.get("name2");
         assertThat(config1.getPropertyNames()).hasSize(5).contains("k1", "k2", "k3.x", "channel-name", "type");
         assertThat(config1.getValue("k1", String.class)).isEqualTo("v1");
         assertThat(config1.getValue("k2", String.class)).isEqualTo("v2");
@@ -57,9 +57,9 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name.k3.x", "v3");
 
         Config config = new DummyConfig(backend);
-        Map<String, ConnectorConfig> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
         assertThat(map).hasSize(1).containsKeys("name");
-        ConnectorConfig config1 = map.get("name");
+        Config config1 = map.get("name");
         assertThat(config1.getPropertyNames()).hasSize(5);
         assertThat(config1.getValue("channel-name", String.class)).isEqualTo("name");
     }
@@ -106,9 +106,9 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name2.b", "B22");
 
         Config config = new DummyConfig(backend);
-        Map<String, ConnectorConfig> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
         assertThat(map).hasSize(2).containsKeys("name", "name2");
-        ConnectorConfig config1 = map.get("name");
+        Config config1 = map.get("name");
         assertThat(config1.getPropertyNames()).hasSize(6).contains("a", "b", "k1", "k2", "connector", "channel-name");
         assertThat(config1.getValue("k1", String.class)).isEqualTo("v1");
         assertThat(config1.getValue("a", String.class)).isEqualTo("A");
@@ -118,7 +118,7 @@ public class ConfiguredStreamFactoryTest {
         assertThat(config1.getOptionalValue("b", String.class)).contains("B2");
         assertThat(config1.getOptionalValue("c", String.class)).isEmpty();
 
-        ConnectorConfig config2 = map.get("name2");
+        Config config2 = map.get("name2");
         assertThat(config2.getPropertyNames()).hasSize(6).contains("a", "b", "k1", "k2", "connector", "channel-name");
         assertThat(config2.getValue("k1", String.class)).isEqualTo("v12");
         assertThat(config2.getValue("a", String.class)).isEqualTo("A");
