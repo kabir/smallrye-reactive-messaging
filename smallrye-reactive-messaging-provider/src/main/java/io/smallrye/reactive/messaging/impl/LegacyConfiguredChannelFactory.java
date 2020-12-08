@@ -13,6 +13,7 @@ import org.eclipse.microprofile.reactive.messaging.spi.IncomingConnectorFactory;
 import org.eclipse.microprofile.reactive.messaging.spi.OutgoingConnectorFactory;
 
 import io.smallrye.reactive.messaging.ChannelRegistry;
+import io.smallrye.reactive.messaging.internal.InternalConfigAdapterFactory;
 
 /**
  * Look for stream factories and get instances.
@@ -42,8 +43,10 @@ public class LegacyConfiguredChannelFactory extends ConfiguredChannelFactory {
         if (this.config == null) {
             return;
         }
-        Map<String, Config> sourceConfiguration = extractConfigurationFor(SOURCE_CONFIG_PREFIX, config);
-        Map<String, Config> sinkConfiguration = extractConfigurationFor(SINK_CONFIG_PREFIX, config);
+
+        InternalConfigAdapterFactory configAdapterFactory = InternalConfigAdapterFactoryUtil.findInternalConfigAdapterFactory();
+        Map<String, Config> sourceConfiguration = extractConfigurationFor(SOURCE_CONFIG_PREFIX, config, configAdapterFactory);
+        Map<String, Config> sinkConfiguration = extractConfigurationFor(SINK_CONFIG_PREFIX, config, configAdapterFactory);
 
         register(sourceConfiguration, sinkConfiguration);
     }

@@ -19,13 +19,18 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.eclipse.microprofile.reactive.messaging.spi.*;
+import org.eclipse.microprofile.reactive.messaging.spi.Connector;
+import org.eclipse.microprofile.reactive.messaging.spi.ConnectorFactory;
+import org.eclipse.microprofile.reactive.messaging.spi.ConnectorLiteral;
+import org.eclipse.microprofile.reactive.messaging.spi.IncomingConnectorFactory;
+import org.eclipse.microprofile.reactive.messaging.spi.OutgoingConnectorFactory;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.SubscriberBuilder;
 
 import io.smallrye.reactive.messaging.ChannelRegistar;
 import io.smallrye.reactive.messaging.ChannelRegistry;
 import io.smallrye.reactive.messaging.PublisherDecorator;
+import io.smallrye.reactive.messaging.internal.InternalConfigAdapterFactory;
 
 /**
  * Look for stream factories and get instances.
@@ -88,7 +93,8 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
                 .collect(Collectors.toList());
     }
 
-    static Map<String, Config> extractConfigurationFor(String prefix, Config root) {
+    static Map<String, Config> extractConfigurationFor(String prefix, Config root,
+            InternalConfigAdapterFactory configAdapterFactory) {
         Iterable<String> names = root.getPropertyNames();
         Map<String, Config> configs = new HashMap<>();
         names.forEach(key -> {
@@ -102,7 +108,10 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
                     String tmp = name;
                     name = tmp.substring(0, tmp.indexOf('.'));
                 }
-                configs.put(name, new ConnectorConfig(prefix, root, name));
+
+                ConnectorConfig config = new ConnectorConfig(prefix, root, name);
+                Config mpConfig = configAdapterFactory.create(config);
+                configs.put(name, mpConfig);
             }
         });
         return configs;
@@ -117,8 +126,11 @@ public class ConfiguredChannelFactory implements ChannelRegistar {
 
         log.channelManagerInitializing();
 
-        Map<String, Config> sourceConfiguration = extractConfigurationFor(ConnectorFactory.INCOMING_PREFIX, config);
-        Map<String, Config> sinkConfiguration = extractConfigurationFor(ConnectorFactory.OUTGOING_PREFIX, config);
+        InternalConfigAdapterFactory configAdapterFactory = InternalConfigAdapterFactoryUtil.findInternalConfigAdapterFactory();
+        Map<String, Config> sourceConfiguration = extractConfigurationFor(ConnectorFactory.INCOMING_PREFIX, config,
+                configAdapterFactory);
+        Map<String, Config> sinkConfiguration = extractConfigurationFor(ConnectorFactory.OUTGOING_PREFIX, config,
+                configAdapterFactory);
 
         detectNameConflict(sourceConfiguration, sinkConfiguration);
 

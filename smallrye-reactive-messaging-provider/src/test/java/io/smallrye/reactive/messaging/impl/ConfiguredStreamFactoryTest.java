@@ -8,9 +8,19 @@ import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigValue;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.eclipse.microprofile.config.spi.Converter;
+import org.junit.Before;
 import org.junit.Test;
 
+import io.smallrye.reactive.messaging.internal.InternalConfigAdapterFactory;
+
 public class ConfiguredStreamFactoryTest {
+
+    private InternalConfigAdapterFactory configAdapterFactory;
+
+    @Before
+    public void before() {
+        configAdapterFactory = InternalConfigAdapterFactoryUtil.findInternalConfigAdapterFactory();
+    }
 
     @Test
     public void testSimpleExtraction() {
@@ -28,7 +38,7 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name2.another", "1");
 
         Config config = new DummyConfig(backend);
-        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config, configAdapterFactory);
 
         assertThat(map).hasSize(2).containsKeys("name", "name2");
         Config config1 = map.get("name");
@@ -57,7 +67,7 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name.k3.x", "v3");
 
         Config config = new DummyConfig(backend);
-        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config, configAdapterFactory);
         assertThat(map).hasSize(1).containsKeys("name");
         Config config1 = map.get("name");
         assertThat(config1.getPropertyNames()).hasSize(5);
@@ -73,7 +83,7 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name.k3.x", "v3");
 
         Config config = new DummyConfig(backend);
-        ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config, configAdapterFactory);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -86,7 +96,7 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name.k3.x", "v3");
 
         Config config = new DummyConfig(backend);
-        ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config, configAdapterFactory);
     }
 
     @Test
@@ -106,7 +116,7 @@ public class ConfiguredStreamFactoryTest {
         backend.put("io.prefix.name2.b", "B22");
 
         Config config = new DummyConfig(backend);
-        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config);
+        Map<String, Config> map = ConfiguredChannelFactory.extractConfigurationFor("io.prefix.", config, configAdapterFactory);
         assertThat(map).hasSize(2).containsKeys("name", "name2");
         Config config1 = map.get("name");
         assertThat(config1.getPropertyNames()).hasSize(6).contains("a", "b", "k1", "k2", "connector", "channel-name");

@@ -251,4 +251,7 @@ public interface ProviderExceptions {
 
     @Message(id = 74, value = "Unable to retrieve the config")
     IllegalStateException illegalStateRetieveConfig();
+
+    @Message(id = 75, value = "Exactly one instance of %s expected. Found: %s")
+    IllegalStateException serviceLoaderExpectesOneEntry(Class<?> clazz, List<?> found);
 }

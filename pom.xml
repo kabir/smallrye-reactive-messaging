@@ -109,6 +109,8 @@
     <module>smallrye-reactive-messaging-jms</module>
     <module>smallrye-reactive-messaging-gcp-pubsub</module>
     <module>smallrye-reactive-messaging-health</module>
+    <module>smallrye-reactive-messaging-config-adapter-1.4</module>
+    <module>smallrye-reactive-messaging-config-adapter-2.0</module>
 
     <module>examples/quickstart</module>
     <module>examples/cloud-events</module>

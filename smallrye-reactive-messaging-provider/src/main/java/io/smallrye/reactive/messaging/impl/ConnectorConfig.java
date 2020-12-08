@@ -11,10 +11,12 @@ import org.eclipse.microprofile.config.ConfigValue;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.eclipse.microprofile.config.spi.Converter;
 
+import io.smallrye.reactive.messaging.internal.InternalConfig;
+
 /**
  * Implementation of config used to configured the different messaging provider / connector.
  */
-class ConnectorConfig implements Config {
+class ConnectorConfig implements InternalConfig {
 
     /**
      * Name of the attribute checking if the channel is enabled (default) or disabled.
