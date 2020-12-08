@@ -47,11 +47,6 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.smallrye.config</groupId>
-      <artifactId>smallrye-config</artifactId>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
@@ -60,13 +55,27 @@
       <scope>provided</scope>
     </dependency>
 
+    <!--
+      Probably put these into a profile to choose between MP 2.0 and 1.4 for different test runs?
+    -->
+    <dependency>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-reactive-messaging-config-adapter-2.0</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.smallrye.config</groupId>
+      <artifactId>smallrye-config</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>        
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
           <annotationProcessors>

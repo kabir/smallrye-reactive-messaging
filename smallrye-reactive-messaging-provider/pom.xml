@@ -42,11 +42,6 @@
     </dependency>
 
     <dependency>
-      <groupId>io.smallrye.config</groupId>
-      <artifactId>smallrye-config</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>io.smallrye.reactive</groupId>
       <artifactId>test-common</artifactId>
       <version>${project.version}</version>
@@ -70,5 +65,21 @@
       <artifactId>jboss-logmanager</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!--
+      Probably put these into a profile to choose between MP 2.0 and 1.4 for different test runs?
+    -->
+    <dependency>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-reactive-messaging-config-adapter-2.0</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.smallrye.config</groupId>
+      <artifactId>smallrye-config</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
