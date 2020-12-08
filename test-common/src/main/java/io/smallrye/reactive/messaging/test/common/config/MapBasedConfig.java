@@ -100,4 +100,5 @@ public class MapBasedConfig implements Config {
         map.put(key, value);
         return this;
     }
+
 }
