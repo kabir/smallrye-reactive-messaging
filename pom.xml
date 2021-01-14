@@ -11,7 +11,7 @@
 
   <groupId>io.smallrye.reactive</groupId>
   <artifactId>smallrye-reactive-messaging</artifactId>
-  <version>2.7.1</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>SmallRye Reactive Messaging</name>
@@ -65,16 +65,16 @@
 
     <microprofile-reactive-messaging.version>1.0</microprofile-reactive-messaging.version>
     <microprofile-reactive-streams.version>1.0.1</microprofile-reactive-streams.version>
-    <microprofile-config.version>1.4</microprofile-config.version>
-    <microprofile-metrics-api.version>2.3.2</microprofile-metrics-api.version>
-    <microprofile-health-api.version>2.2</microprofile-health-api.version>
+    <microprofile-config.version>2.0</microprofile-config.version>
+    <microprofile-metrics-api.version>3.0</microprofile-metrics-api.version>
+    <microprofile-health-api.version>3.0</microprofile-health-api.version>
 
-    <smallrye-config.version>1.9.3</smallrye-config.version>
-    <smallrye-metrics.version>2.4.4</smallrye-metrics.version>
+    <smallrye-config.version>2.0.1</smallrye-config.version>
+    <smallrye-metrics.version>3.0.0-RC2</smallrye-metrics.version>
     <smallrye-common.version>1.5.0</smallrye-common.version>
-    <smallrye-health.version>2.2.5</smallrye-health.version>
+    <smallrye-health.version>3.0.0-RC2</smallrye-health.version>
     <smallrye-testing.version>0.1.0</smallrye-testing.version>
-    <smallrye-fault-tolerance.version>4.3.2</smallrye-fault-tolerance.version>
+    <smallrye-fault-tolerance.version>5.0.0-RC1</smallrye-fault-tolerance.version>
 
     <mutiny.version>0.12.5</mutiny.version>
     <artemis.version>2.16.0</artemis.version>
