@@ -104,6 +104,34 @@
           <reuseForks>true</reuseForks>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>api-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>api</classifier>
+              <includes>
+                <include>io/smallrye/reactive/messaging/kafka/*</include>
+              </includes>
+              <excludes>
+                <exclude>io/smallrye/reactive/messaging/kafka/IncomingKafkaCloudEventMetadata*</exclude>
+                <exclude>io/smallrye/reactive/messaging/kafka/IncomingKafkaRecord*</exclude>
+                <exclude>io/smallrye/reactive/messaging/kafka/KafkaCDIEvents*</exclude>
+                <exclude>io/smallrye/reactive/messaging/kafka/KafkaConnector*</exclude>
+                <exclude>io/smallrye/reactive/messaging/kafka/KafkaMessage.*</exclude>
+                <exclude>io/smallrye/reactive/messaging/kafka/KafkaMessage$*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
