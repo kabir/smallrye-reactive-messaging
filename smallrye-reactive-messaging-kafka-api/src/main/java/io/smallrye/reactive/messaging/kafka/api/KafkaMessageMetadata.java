@@ -9,8 +9,6 @@ import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 
-import io.smallrye.reactive.messaging.kafka.OutgoingKafkaRecordMetadata;
-
 public interface KafkaMessageMetadata<K> {
 
     String getTopic();
@@ -25,11 +23,17 @@ public interface KafkaMessageMetadata<K> {
 
     interface Builder<K> {
         Builder<K> withTopic(String topic);
+
         Builder<K> withKey(K recordKey);
+
         Builder<K> withPartition(int partition);
+
         Builder<K> withTimestamp(Instant timestamp);
+
         Builder<K> withHeaders(Headers headers);
+
         Builder<K> withHeaders(List<RecordHeader> headers);
+
         KafkaMessageMetadata<K> build();
     }
 

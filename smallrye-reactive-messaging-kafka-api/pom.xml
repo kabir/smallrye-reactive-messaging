@@ -9,9 +9,9 @@
     <version>3.5.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>smallrye-reactive-messaging-kafka</artifactId>
+  <artifactId>smallrye-reactive-messaging-kafka-api</artifactId>
 
-  <name>SmallRye Reactive Messaging : Connector :: Kafka</name>
+  <name>SmallRye Reactive Messaging : Connector :: Kafka User API</name>
 
   <properties>
     <kafka.version>2.8.0</kafka.version>
@@ -20,93 +20,26 @@
   <dependencies>
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
-      <artifactId>smallrye-mutiny-vertx-kafka-client</artifactId>
-      <version>${smallrye-vertx-mutiny-clients.version}</version>
+      <artifactId>smallrye-connector-attribute-processor</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
     </dependency>
+    <!--
+      Experimental evolution of the spec API.
+      scope=provided to not leak into user code
+    -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>smallrye-reactive-messaging-provider</artifactId>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-reactive-messaging-api</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-semconv</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>io.smallrye.config</groupId>
-      <artifactId>smallrye-config</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.smallrye.reactive</groupId>
-      <artifactId>test-common</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk-trace</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk-testing</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.smallrye.reactive</groupId>
-      <artifactId>smallrye-connector-attribute-processor</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.smallrye.reactive</groupId>
-      <artifactId>smallrye-reactive-messaging-kafka-api</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.strimzi</groupId>
-      <artifactId>strimzi-test-container</artifactId>
-      <version>0.23.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>toxiproxy</artifactId>
-      <version>1.15.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.smallrye.reactive</groupId>
-      <artifactId>reactive-streams-junit5-tck</artifactId>
-      <version>${mutiny.version}</version>
-      <scope>test</scope>
-      <classifier>tests</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.reactivestreams</groupId>
-      <artifactId>reactive-streams-tck</artifactId>
-      <version>1.0.3</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
