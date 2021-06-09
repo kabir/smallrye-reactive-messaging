@@ -9,6 +9,8 @@ import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.apache.kafka.common.record.TimestampType;
 
+import io.smallrye.reactive.messaging.kafka.api.KafkaMessageMetadata;
+
 public class IncomingKafkaRecordMetadata<K, T> implements KafkaMessageMetadata<K> {
 
     private final K recordKey;

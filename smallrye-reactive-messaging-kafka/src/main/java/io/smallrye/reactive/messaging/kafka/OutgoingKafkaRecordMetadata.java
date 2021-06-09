@@ -9,6 +9,8 @@ import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 
+import io.smallrye.reactive.messaging.kafka.api.KafkaMessageMetadata;
+
 public class OutgoingKafkaRecordMetadata<K> implements KafkaMessageMetadata<K> {
 
     private final String topic;
