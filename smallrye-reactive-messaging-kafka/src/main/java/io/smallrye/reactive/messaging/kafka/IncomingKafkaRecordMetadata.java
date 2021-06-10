@@ -11,7 +11,8 @@ import org.apache.kafka.common.record.TimestampType;
 
 import io.smallrye.reactive.messaging.kafka.api.KafkaMessageMetadata;
 
-public class IncomingKafkaRecordMetadata<K, T> implements KafkaMessageMetadata<K> {
+public class IncomingKafkaRecordMetadata<K, T>
+        implements KafkaMessageMetadata<K>, io.smallrye.reactive.messaging.kafka.KafkaMessageMetadata<K> {
 
     private final K recordKey;
     private final String topic;

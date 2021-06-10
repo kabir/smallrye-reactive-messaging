@@ -6,7 +6,7 @@ import org.apache.kafka.common.header.Headers;
 
 import io.smallrye.reactive.messaging.kafka.api.KafkaMessageMetadataImpl;
 
-public class OutgoingKafkaRecordMetadata<K> extends KafkaMessageMetadataImpl<K> {
+public class OutgoingKafkaRecordMetadata<K> extends KafkaMessageMetadataImpl<K> implements KafkaMessageMetadata<K> {
 
     public static <K> OutgoingKafkaRecordMetadataBuilder<K> builder() {
         return new OutgoingKafkaRecordMetadataBuilder<>();
