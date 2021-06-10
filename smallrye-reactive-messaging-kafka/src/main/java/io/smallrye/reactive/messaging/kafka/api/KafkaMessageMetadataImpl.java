@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.apache.kafka.common.header.Headers;
 
 /**
- * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
+ * For internal use only
  */
 class KafkaMessageMetadataImpl<K> implements KafkaMessageMetadata<K> {
     private final String topic;
